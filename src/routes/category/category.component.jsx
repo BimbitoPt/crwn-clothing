@@ -1,29 +1,45 @@
-import { useContext, useState, useEffect, Fragment } from 'react';
-import { useParams } from 'react-router-dom';
-
-import ProductCard from '../../components/product-card/product-card.component';
-
-import { CategoriesContext } from '../../context/categories.context';
-
-import { CategoryContainer, Title } from './category.styles';
+import { useEffect, Fragment, useMemo } from "react";
+import { useParams } from "react-router-dom";
+import ProductCard from "../../components/product-card/product-card.component";
+import { CategoryContainer, Title } from "./category.styles";
+import { useSelector } from "react-redux";
+import { selectCategoriesMap } from "../../store/categories/category.selector";
 
 const Category = () => {
   const { category } = useParams();
-  const { categoriesMap } = useContext(CategoriesContext);
-  const [products, setProducts] = useState(categoriesMap[category]);
+  const categoriesMap = useSelector(selectCategoriesMap);
+
+  // Memoize products to optimize re-renders
+  const products = useMemo(() => {
+    return categoriesMap && categoriesMap[category];
+  }, [category, categoriesMap]);
 
   useEffect(() => {
-    setProducts(categoriesMap[category]);
-  }, [category, categoriesMap]);
+    if (!products) {
+      console.log("Category not found:", category); // Debugging
+    }
+  }, [category, products]);
+
+  // Handle case when products are not found
+  if (!category) {
+    return <div>Invalid category.</div>;
+  }
+
+  if (!categoriesMap || !products) {
+    return <div>Loading...</div>; // Show a loading spinner or placeholder
+  }
+
+  if (products.length === 0) {
+    return <div>No products found in this category.</div>;
+  }
 
   return (
     <Fragment>
       <Title>{category.toUpperCase()}</Title>
       <CategoryContainer>
-        {products &&
-          products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
       </CategoryContainer>
     </Fragment>
   );
