@@ -1,14 +1,10 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const CartItemContainer = styled.div`
   width: 100%;
   display: flex;
   height: 80px;
   margin-bottom: 15px;
-
-  img {
-    width: 30%;
-  }
 `;
 
 export const ItemDetails = styled.div`
@@ -18,8 +14,35 @@ export const ItemDetails = styled.div`
   align-items: flex-start;
   justify-content: center;
   padding: 10px 20px;
+`;
 
-  span {
-    font-size: 16px;
+export const Name = styled.span`
+  font-size: 16px;
+`;
+
+export const Quantity = styled.span`
+  display: flex;
+`;
+
+export const Arrow = styled.div`
+  cursor: pointer;
+`;
+
+export const Value = styled.span`
+  margin: 0 10px;
+`;
+
+export const RemoveButton = styled.div`
+  padding-left: 12px;
+  cursor: pointer;
+`;
+
+export const ImageContainer = styled.div`
+  width: 30%;
+  padding-right: 15px;
+
+  img {
+    width: 80px;
+    height: 80px;
   }
 `;

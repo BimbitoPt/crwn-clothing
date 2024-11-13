@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector } from "reselect";
 
 // Select the categories slice from the Redux state
 const selectCategoryReducer = (state) => state.categories;
@@ -23,4 +23,9 @@ export const selectCategoriesMap = createSelector(
       return acc;
     }, {});
   }
+);
+
+export const selectIsCategoriesLoading = createSelector(
+  [selectCategoryReducer],
+  (categoriesSlice) => categoriesSlice.isLoading
 );

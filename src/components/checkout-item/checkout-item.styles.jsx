@@ -24,8 +24,9 @@ export const BaseSpan = styled.span`
   width: 23%;
 `;
 
-export const Quantity = styled(BaseSpan)`
+export const Quantity = styled.span`
   display: flex;
+  width: 23%;
 `;
 
 export const Arrow = styled.div`

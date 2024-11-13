@@ -1,4 +1,7 @@
-import { useSelector, useDispatch } from "react-redux"; // Import useSelector and useDispatch from react-redux
+import { useDispatch, useSelector } from 'react-redux';
+import { addItemToCart, removeItemFromCart, clearItemFromCart } from '../../store/cart/cart.action';
+import { selectCartItems } from '../../store/cart/cart.selector';
+
 import {
   CheckoutItemContainer,
   ImageContainer,
@@ -7,52 +10,16 @@ import {
   Arrow,
   Value,
   RemoveButton,
-} from "./checkout-item.styles";
-import { setCartItems } from "../../store/cart/cart.action"; // Import the action to update cart items
+} from './checkout-item.styles';
 
 const CheckoutItem = ({ cartItem }) => {
   const { name, imageUrl, price, quantity } = cartItem;
-
-  // Access cartItems from the Redux state using useSelector (if needed elsewhere)
-  const cartItems = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
+  const cartItems = useSelector(selectCartItems);
 
-  const updateCartItems = (newCartItems) => {
-    const newCartCount = newCartItems.reduce(
-      (total, item) => total + item.quantity,
-      0
-    );
-    const newCartTotal = newCartItems.reduce(
-      (total, item) => total + item.quantity * item.price,
-      0
-    );
-
-    // Dispatch action to update cart state in Redux
-    dispatch(setCartItems(newCartItems, newCartTotal, newCartCount));
-  };
-
-  const clearItemHandler = () => {
-    const newCartItems = cartItems.filter((item) => item.id !== cartItem.id);
-    updateCartItems(newCartItems);
-  };
-
-  const addItemHandler = () => {
-    const newCartItems = cartItems.map((item) =>
-      item.id === cartItem.id
-        ? { ...item, quantity: item.quantity + 1 }
-        : item
-    );
-    updateCartItems(newCartItems);
-  };
-
-  const removeItemHandler = () => {
-    const newCartItems = cartItems.map((item) =>
-      item.id === cartItem.id && item.quantity > 1
-        ? { ...item, quantity: item.quantity - 1 }
-        : item
-    ).filter(item => item.quantity > 0); // Filter out items with quantity 0
-    updateCartItems(newCartItems);
-  };
+  const clearItemHandler = () => dispatch(clearItemFromCart(cartItems, cartItem));
+  const addItemHandler = () => dispatch(addItemToCart(cartItems, cartItem));
+  const removeItemHandler = () => dispatch(removeItemFromCart(cartItems, cartItem));
 
   return (
     <CheckoutItemContainer>

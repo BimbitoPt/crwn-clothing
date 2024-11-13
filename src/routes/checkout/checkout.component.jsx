@@ -1,5 +1,6 @@
-import { useSelector } from 'react-redux'; // Import useSelector from react-redux
+import { useSelector } from 'react-redux';
 import CheckoutItem from '../../components/checkout-item/checkout-item.component';
+import { selectCartItems, selectCartTotal } from '../../store/cart/cart.selector';
 
 import {
   CheckoutContainer,
@@ -9,9 +10,8 @@ import {
 } from './checkout.styles';
 
 const Checkout = () => {
-  // Use useSelector to access Redux store's cartItems and cartTotal
-  const cartItems = useSelector((state) => state.cart.cartItems); // Access cartItems from Redux state
-  const cartTotal = useSelector((state) => state.cart.cartTotal); // Access cartTotal from Redux state
+  const cartItems = useSelector(selectCartItems);
+  const cartTotal = useSelector(selectCartTotal);
 
   return (
     <CheckoutContainer>
@@ -37,7 +37,7 @@ const Checkout = () => {
           <CheckoutItem key={cartItem.id} cartItem={cartItem} />
         ))
       ) : (
-        <div>Your cart is empty</div> // Show message if no items in the cart
+        <div>Your cart is empty</div>
       )}
       <Total>Total: ${cartTotal}</Total>
     </CheckoutContainer>
