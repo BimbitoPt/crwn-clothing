@@ -1,40 +1,35 @@
-import { legacy_createStore, applyMiddleware, compose } from "redux";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import logger from "redux-logger";
-import createSagaMiddleware from "redux-saga";
-import { rootReducer } from "./root-reducer";
-import { rootSaga } from "./root-saga";
+// import { compose, createStore, applyMiddleware } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
+// import { persistStore, persistReducer } from 'redux-persist';
+// import storage from 'redux-persist/lib/storage';
+import logger from 'redux-logger';
 
-const persistConfig = {
-  key: "root",
-  storage,
-  whitelist: ["cart", "categories"], // Add the reducers you want to persist
-};
+import { rootReducer } from './root-reducer';
 
-const sagaMiddleware = createSagaMiddleware();
-
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
-const middleWares = [
-  process.env.NODE_ENV !== "production" && logger,
-  sagaMiddleware,
-].filter(Boolean);
-
-const composeEnhancer =
-  (process.env.NODE_ENV !== "production" &&
-    window &&
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
-  compose;
-
-const composedEnhancers = composeEnhancer(applyMiddleware(...middleWares));
-
-export const store = legacy_createStore(
-  persistedReducer,
-  undefined,
-  composedEnhancers
+const middleWares = [process.env.NODE_ENV === 'development' && logger].filter(
+  Boolean
 );
 
-sagaMiddleware.run(rootSaga);
+// const composeEnhancer =
+//   (process.env.NODE_ENV !== 'production' &&
+//     window &&
+//     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+//   compose;
 
-export const persistor = persistStore(store);
+// const persistConfig = {
+//   key: 'root',
+//   storage,
+//   blacklist: ['user'],
+// };
+
+// const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// const composedEnhancers = composeEnhancer(applyMiddleware(...middleWares));
+
+export const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(middleWares),
+});
+
+// export const persistor = persistStore(store);
