@@ -1,13 +1,17 @@
-import { useSelector } from 'react-redux';
-import CheckoutItem from '../../components/checkout-item/checkout-item.component';
-import { selectCartItems, selectCartTotal } from '../../store/cart/cart.selector';
+import { useSelector } from "react-redux";
+import CheckoutItem from "../../components/checkout-item/checkout-item.component";
+import {
+  selectCartItems,
+  selectCartTotal,
+} from "../../store/cart/cart.selector";
 
 import {
   CheckoutContainer,
   CheckoutHeader,
   HeaderBlock,
   Total,
-} from './checkout.styles';
+} from "./checkout.styles";
+import PaymentForm from "../../components/payment-form/payment-form.component";
 
 const Checkout = () => {
   const cartItems = useSelector(selectCartItems);
@@ -40,6 +44,7 @@ const Checkout = () => {
         <div>Your cart is empty</div>
       )}
       <Total>Total: ${cartTotal}</Total>
+      <PaymentForm />
     </CheckoutContainer>
   );
 };
